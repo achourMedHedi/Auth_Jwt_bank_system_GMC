@@ -63,7 +63,7 @@ namespace JWTwithNeo4j.Controllers
 
         // GET: api/Auth
         [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult GetPerson()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claims = identity.Claims;
