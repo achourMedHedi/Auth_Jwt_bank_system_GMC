@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Bank.Core.Bank;
 using JWTwithNeo4j.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -19,13 +21,27 @@ namespace JWTwithNeo4j.Controllers
     {
         private IUserService _userService;
         private readonly IDriver _driver;
+        private IBank<string, string, string> Bank;
 
-        public AuthController(IUserService userService)
+        public AuthController(IUserService userService , IBank<string, string, string> bank)
         {
+            Bank = bank; 
             _userService = userService;
             _driver = GraphDatabase.Driver("bolt://localhost:7687", AuthTokens.Basic("neo4j", "Aze123qsd456"));
 
         }
+
+        /// <summary>
+        /// Generate Token to Login 
+        /// </summary>
+        /// <param name="userParam">user information </param>
+        /// <response code="200"> success ya m3alem</response>
+        /// <response code="404"> user not found</response>
+        /// <returns></returns>
+        // GET: api/auth/authenticate
+        [ProducesResponseType(typeof(User), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]User userParam)
@@ -41,7 +57,6 @@ namespace JWTwithNeo4j.Controllers
            
             }
             return NotFound();
-            
         }
 
 
@@ -61,6 +76,14 @@ namespace JWTwithNeo4j.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// authentify user by token 
+        /// </summary>=
+        /// <response code="200"> success</response>
+        /// <response code="404"> user not found</response>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(User), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         // GET: api/Auth
         [HttpGet]
         public IActionResult GetPerson()
@@ -68,13 +91,13 @@ namespace JWTwithNeo4j.Controllers
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claims = identity.Claims;
             var users = _userService.GetAll(claims.First().Value);
-            
+            if (users == null)
+            {
+                return NotFound();
+            }
             return Ok(users);
         }
-
-
-
-       
+        
     }
 }
 

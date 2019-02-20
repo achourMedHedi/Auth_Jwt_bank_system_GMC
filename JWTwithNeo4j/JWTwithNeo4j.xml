@@ -4,5 +4,43 @@
         <name>JWTwithNeo4j</name>
     </assembly>
     <members>
+        <member name="M:JWTwithNeo4j.Controllers.AuthController.Authenticate(JWTwithNeo4j.Entity.User)">
+            <summary>
+            Generate Token to Login 
+            </summary>
+            <param name="userParam">user information </param>
+            <response code="200"> success ya m3alem</response>
+            <response code="404"> user not found</response>
+            <returns></returns>
+        </member>
+        <member name="M:JWTwithNeo4j.Controllers.AuthController.Post(JWTwithNeo4j.Entity.User)">
+            <summary>
+            create an account
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:JWTwithNeo4j.Controllers.AuthController.GetPerson">
+            <summary>
+            authentify user by token 
+            </summary>=
+            <response code="200"> success</response>
+            <response code="404"> user not found</response>
+            <returns></returns>
+        </member>
+        <member name="M:JWTwithNeo4j.Controllers.BankController.Get">
+            <summary>
+            get bank information
+            </summary>=
+            <response code="200"> success Bank information </response>
+            <returns></returns>
+        </member>
+        <member name="M:JWTwithNeo4j.Controllers.BankController.Post(Bank.Core.Bank.Bank{System.String,System.String,System.String})">
+            <summary>
+            create new bank
+            </summary>=
+            <response code="200"> success </response>
+            <returns></returns>
+        </member>
     </members>
 </doc>
